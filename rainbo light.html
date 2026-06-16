@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Animated Gradient Canvas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+
+    body{
+        overflow:hidden;
+        background:#000;
+    }
+
+    canvas{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100vw;
+        height:100vh;
+    }
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let w, h;
+function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+let t = 0;
+
+function draw(){
+    t += 0.01;
+
+    const grad = ctx.createLinearGradient(
+        Math.sin(t) * w,
+        Math.cos(t) * h,
+        w,
+        h
+    );
+
+    grad.addColorStop(0, `hsl(${t*40 % 360}, 80%, 60%)`);
+    grad.addColorStop(0.5, `hsl(${(t*40+120) % 360}, 80%, 60%)`);
+    grad.addColorStop(1, `hsl(${(t*40+240) % 360}, 80%, 60%)`);
+
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+
+</body>
+</html>
